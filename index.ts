@@ -1,10 +1,9 @@
 // @ts-ignore
-
 import { GoogleGenAI } from "@google/genai";
 import { Client, LocalAuth } from "whatsapp-web.js";
 // @ts-ignore
 import qrcode from "qrcode-terminal";
-import { createCalendarEvent, calendarToolDefinition } from "./calendar.ts";
+import { createCalendarEvent, calendarToolDefinition } from "./calendar";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -51,7 +50,9 @@ whatsapp.on("message", async (msg) => {
 
     // Cek apakah Gemini memutuskan untuk memanggil Function Calling
     const functionCalls = response.functionCalls;
-    if (functionCalls && functionCalls.length > 0) {
+
+    // Pastikan array functionCalls ada, isinya lebih dari 0, dan indeks ke-0 tidak undefined
+    if (functionCalls && functionCalls.length > 0 && functionCalls[0]) {
       const call = functionCalls[0];
 
       if (call.name === "createCalendarEvent") {

@@ -1,10 +1,16 @@
 FROM oven/bun:1-slim
 
 USER root
-RUN apt-get update && apt-get install -y \
+
+# Perbaikan: Tambahkan konfigurasi non-interactive dan sederhanakan font agar tidak gagal resolve
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     chromium \
-    fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-    --no-install-recommends \
+    fonts-liberation \
+    libxss1 \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
@@ -12,7 +18,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 
 WORKDIR /app
 
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 COPY . .
