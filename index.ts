@@ -26,7 +26,7 @@ whatsapp.on("qr", (qr) => {
   console.log("=== SCAN QR CODE DI BAWAH INI ===\n", qr);
 });
 
-whatsapp.on("ready", () => console.log("WhatsApp Bot Ready!"));
+whatsapp.on("ready", () => console.log("WhatsApp Bot Ready !"));
 
 whatsapp.on("message", async (msg) => {
   // Abaikan pesan jika berasal dari Group Chat
