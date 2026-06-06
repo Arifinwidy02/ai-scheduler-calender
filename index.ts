@@ -19,10 +19,20 @@ const whatsapp = new Client({
   },
 });
 
-whatsapp.on("qr", (qr) => {
+whatsapp.on("qr", async (qr) => {
   // Mengenerate QR code di terminal log
-  qrcode.generate(qr, { small: true });
-  console.log("=== SCAN QR CODE DI BAWAH INI ===\n", qr);
+  // qrcode.generate(qr, { small: true });
+  // console.log("=== SCAN QR CODE DI BAWAH INI ===\n", qr);
+  try {
+    const nomorBot = "081392816836";
+
+    const code = await whatsapp.requestPairingCode(nomorBot);
+    console.log("\n=================================================");
+    console.log(` KODE VERIFIKASI WHATSAPP ANDA: ${code} `);
+    console.log("=================================================\n");
+  } catch (error) {
+    console.log("🚀 ~ error:", error);
+  }
 });
 
 whatsapp.on("ready", () => console.log("WhatsApp Bot Ready !"));
