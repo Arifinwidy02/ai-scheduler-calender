@@ -63,7 +63,7 @@ whatsapp.on("message", async (msg) => {
   try {
     // Panggil model Gemini 1.5 Flash beserta tools kalendernya
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       contents: msg.body + timeContext,
       config: {
         systemInstruction:
