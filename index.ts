@@ -18,32 +18,34 @@ const whatsapp = new Client({
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage", // Menggunakan /tmp alih-alih shared memory RAM
-      "--single-process", // Memaksa browser jalan di satu proses saja (Paling hemat RAM)
-      "--no-zygote", // Mematikan proses fork tambahan Chromium
-      "--no-first-run",
-      "--disable-gpu", // Mematikan akselerasi grafis hardware
-      "--disable-extensions", // Mematikan semua ekstensi browser internal
-      "--disable-component-update", // Mematikan background update Chromium
-      "--mute-audio", // Mematikan alokasi audio browser
-      "--js-flags=--max-old-space-size=512", // Membatasi konsumsi RAM engine v8 JS maksimal 512MB
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
     ],
   },
 });
 
+let codeHaveShown = false;
+
 whatsapp.on("qr", async (qr) => {
-  // Mengenerate QR code di terminal log
-  // qrcode.generate(qr, { small: true });
-  // console.log("=== SCAN QR CODE DI BAWAH INI ===\n", qr);
+  if (codeHaveShown) return;
+
   try {
     const nomorBot = "6281392816836";
+    codeHaveShown = true;
+
+    console.log(`[System] Meminta Pairing Code untuk: ${nomorBot}`);
+
+    // Berikan sedikit delay 3 detik agar halaman whatsapp web benar-benar siap
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const code = await whatsapp.requestPairingCode(nomorBot);
+
     console.log("\n=================================================");
     console.log(` KODE VERIFIKASI WHATSAPP ANDA: ${code} `);
     console.log("=================================================\n");
   } catch (error) {
-    console.log("🚀 ~ error:", error);
+    console.log("Gagal meminta pairing code, mecoba ulang nanti...", error);
+    codeHaveShown = false;
   }
 });
 
