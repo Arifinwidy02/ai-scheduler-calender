@@ -15,7 +15,16 @@ const whatsapp = new Client({
   authStrategy: new LocalAuth(),
   puppeteer: {
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage", // Mengatasi masalah alokasi memori /dev/shm di Docker
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process", // Menghemat penggunaan RAM di server Tencent 2GB
+      "--disable-gpu",
+    ],
   },
 });
 
@@ -24,7 +33,7 @@ whatsapp.on("qr", async (qr) => {
   // qrcode.generate(qr, { small: true });
   // console.log("=== SCAN QR CODE DI BAWAH INI ===\n", qr);
   try {
-    const nomorBot = "081392816836";
+    const nomorBot = "6281392816836";
 
     const code = await whatsapp.requestPairingCode(nomorBot);
     console.log("\n=================================================");
