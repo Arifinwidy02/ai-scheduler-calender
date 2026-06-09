@@ -18,12 +18,15 @@ const whatsapp = new Client({
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage", // Mengatasi masalah alokasi memori /dev/shm di Docker
-      "--disable-accelerated-2d-canvas",
+      "--disable-dev-shm-usage", // Menggunakan /tmp alih-alih shared memory RAM
+      "--single-process", // Memaksa browser jalan di satu proses saja (Paling hemat RAM)
+      "--no-zygote", // Mematikan proses fork tambahan Chromium
       "--no-first-run",
-      "--no-zygote",
-      "--single-process", // Menghemat penggunaan RAM di server Tencent 2GB
-      "--disable-gpu",
+      "--disable-gpu", // Mematikan akselerasi grafis hardware
+      "--disable-extensions", // Mematikan semua ekstensi browser internal
+      "--disable-component-update", // Mematikan background update Chromium
+      "--mute-audio", // Mematikan alokasi audio browser
+      "--js-flags=--max-old-space-size=512", // Membatasi konsumsi RAM engine v8 JS maksimal 512MB
     ],
   },
 });
